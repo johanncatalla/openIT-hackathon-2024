@@ -1,4 +1,5 @@
 <template>
+    <Breadcrumb :home="home" :model="this.items" />
     <div class="buttonview">
         <Toast />
         <FileUpload class="file-upload-button" mode="basic" name="demo[]" :url="uploadUrl" accept=".txt,.xml,.json" :maxFileSize="100000000" @upload="onUpload" :auto="true" chooseLabel="Upload File" :disabled="!selectedFolder"/>   
@@ -17,7 +18,7 @@
     </div>
     <div class="file-content" v-if="selectedFileContent">
         <div>
-            <h1 id="filename">{{ "".concat(selectedFileContent.filename, selectedFileContent.suffix) }}</h1>
+            <h1 id="filename">File Content</h1>
             <textarea :readonly="selectedFileContent.readOnly" v-model="selectedFileContent.Message"></textarea>
         </div>
     </div>
@@ -52,7 +53,8 @@ export default {
             ,selectedFolder: false
             ,fileMessage: '',
             addFolder: false,
-            addFolderVisible: false
+            addFolderVisible: false,
+            items: [],
         };
     },
     computed: {
@@ -90,6 +92,7 @@ export default {
             this.selectedFileContent = '';
             this.selectedFolder = '';
             this.addFolderVisible = false;
+            this.items = [];
         },
         viewFile(file) {
             console.log(file);
@@ -102,6 +105,7 @@ export default {
                 const response = res.data;
                 this.selectedFileContent = response;
                 this.fileMessage = response.Message;
+                this.items[1] = { label: "".concat(response.filename, response.suffix)};
                 
             }).catch((err) => {
                 console.log(err);
@@ -110,6 +114,7 @@ export default {
         setSelectedFolder(foldername) {
             this.selectedFolder = foldername;
             this.addFolderVisible = true;
+            this.items.push({ label: foldername });
             console.log(foldername);
         },
         onUpload(event) {
@@ -225,4 +230,7 @@ textarea{
     margin-right: 10px;
 }
 
+.p-breadcrumb{
+    margin-bottom: 1rem;
+}
 </style>

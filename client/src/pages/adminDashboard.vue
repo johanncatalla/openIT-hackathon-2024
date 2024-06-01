@@ -7,7 +7,6 @@
 
         <div v-if="activeTab === 'dashboard'">
             <div class="card flex justify-content-center">
-                <Breadcrumb :home="home" :model="items" />
                 <TableViewer class="table" :AccessToken="accessToken"></TableViewer>
             </div>
             
@@ -72,10 +71,6 @@ export default {
     background: var(--surface-card);
     padding: 2rem;
     border-radius: 10px;
-    margin-bottom: 1rem;
-}
-
-.p-breadcrumb{
     margin-bottom: 1rem;
 }
 </style>
