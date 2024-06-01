@@ -107,7 +107,7 @@ const addFile = asyncHandler(async(req, res) => {
     }
     const newFile = {
         EventID: directory.dir[0].files.length + 1,
-        filename: file_name,
+        file_name,
         suffix,
         Message: message,
         readOnly: true,
