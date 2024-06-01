@@ -1,14 +1,17 @@
 const express = require('express')
-const mongoose = require('mongoose')
-const app = express()
+const errorHandler = require("./middleware/errorHandler");
+const connectDb = require("./config/dbConnection");
+const dotenv = require("dotenv").config();
 
-mongoose.connect('mongodb+srv://OpenCSame:PfvEiZAwoBI5eM3c@opencsame.frnarkw.mongodb.net/?retryWrites=true&w=majority&appName=OpenCSame')
-    .then(() => {
-        console.log('Connected to MongoDB')
-        app.listen(3000, () => {
-            console.log('Server is running on port 3000')
-        })
-    })
-    .catch((e) => {
-        console.log('Connection failed', e)
-    })
+const app = express()
+const port = process.env.PORT;
+
+connectDb();
+
+app.use(express.json());
+app.use("/api/users", require("./routes/userRoutes"));
+app.use(errorHandler);
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
