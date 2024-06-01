@@ -28,6 +28,10 @@ const fileSchema = mongoose.Schema({
     path: {
         type: String,
         required: [true, "Please add the path"]
+    },            
+    date: {
+        type: String,
+        required: [true, "Please add the date and time"]
     }
 }, {
     timestamps: true,
@@ -57,6 +61,8 @@ const directorySchema = mongoose.Schema({
     collection: 'files'
 });
 
-module.exports = mongoose.model("File", fileSchema);
-module.exports = mongoose.model("Folder", folderSchema);
-module.exports = mongoose.model("Directory", directorySchema);
+const File = mongoose.model("File", fileSchema);
+const Folder = mongoose.model("Folder", folderSchema);
+const Directory = mongoose.model("Directory", directorySchema);
+
+module.exports = { File, Folder, Directory };
