@@ -38,7 +38,6 @@ const getFiles = asyncHandler(async(req, res) => {
 const getFile = asyncHandler(async(req, res) => {
     const {folder_name, event_id} = req.params;
     
-    
     const directory = await Directory.findOne(
         {   "dir._foldername": folder_name,
             "dir.files.EventID": event_id
@@ -48,7 +47,7 @@ const getFile = asyncHandler(async(req, res) => {
         
     if (!directory) {
         res.status(404);
-        throw new Error("Folder not found");
+        throw new Error("File not found");
     }
 
     const matchedFile = directory.dir[0].files.find(file => {return parseInt(file.EventID) === parseInt(event_id)});
@@ -85,6 +84,5 @@ const addFile = asyncHandler(async(req, res) => {
 module.exports = {
     getFolders,
     getFiles,
-    getFile,
-    addFile
+    getFile
 };
