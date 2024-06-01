@@ -54,18 +54,27 @@ export default {
     display: flex;
     justify-content: left;
     padding: 0;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
 }
 
 .tab-menu li {
     cursor: pointer;
     padding: 10px;
+    border-radius: 10px;
 }
 
 .tab-menu li.active {
     background-color: #ccc;
+    
 }
 
 .card {
     background-color: #ccc;
+    background: var(--surface-card);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
 }
 </style>
