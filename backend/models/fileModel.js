@@ -5,7 +5,7 @@ const fileSchema = mongoose.Schema({
         type: Number,
         required: true
     },
-    file_name: {
+    filename: {
         type: String,
         required: [true, "Please add the filename"]
     },
@@ -13,12 +13,12 @@ const fileSchema = mongoose.Schema({
         type: String,
         required: [true, "Please add the suffix"]
     },
-    message: {
+    Message: {
         type: String,
         required: [true, "Please add the message"]
     },
-    access: {
-        type: String, 
+    readOnly: {
+        type: Boolean, 
         required: [true, "Please add the access"]
     },
     deletable: {
@@ -28,10 +28,6 @@ const fileSchema = mongoose.Schema({
     path: {
         type: String,
         required: [true, "Please add the path"]
-    },            
-    date: {
-        type: String,
-        required: [true, "Please add the date and time"]
     }
 }, {
     timestamps: true,

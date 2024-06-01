@@ -14,9 +14,10 @@ router.use(validateToken);
 router.route("/dashboard").get(getFolders);
 router.route("/dashboard/folder/:folder_name").get(getFiles);
 router.route("/dashboard/folder/:folder_name/:event_id").get(getFile);
+router.route("/dashboard").post(createFolder);
 router.route("/dashboard/folder/:folder_name").post(addFile);
     
-router.route("/dashboard").post(createFolder);
+
 
 
 module.exports = router;

@@ -76,7 +76,7 @@ const createFolder = asyncHandler(async(req, res) => {
     const directoryWithFolder = await Directory.findOne({ "dir._foldername": _foldername });
     if (directoryWithFolder) {
         res.status(400);
-        throw new Error("Folder name already exists!");
+        throw new Error("Folder name already exists");
     }
 
     const newFolder = new Folder({ _foldername, path, files });
@@ -98,33 +98,48 @@ const createFolder = asyncHandler(async(req, res) => {
 const addFile = asyncHandler(async(req, res) => {
     const {folder_name} = req.params;
     
-    const {file_name, suffix, message, access, deletable, path, date} = req.body;
-    const directory = await Directory.findOne({ "dir._foldername": folder_name }, { "dir.$": 1 });
+    const {filename, suffix, Message, readOnly, deletable} = req.body;
+    if (!filename || !suffix || !Message) {
+        res.status(400);
+        throw new Error("Please fill out the required fields");
+    }
 
+    if(req.user.userType !== "admin") {
+        res.status(403);
+        throw new Error("User don't have permission to create folder");
+    }
+
+    const directory = await Directory.findOne({ "dir._foldername": folder_name }, { "dir.$": 1 });
     if (!directory) {
         res.status(404);
         throw new Error("Folder not found");
     }
+
+    const folderWithFile = await Folder.findOne({ "files.filename": filename });
+    if (folderWithFile) {
+        res.status(400);
+        throw new Error("File name already exists");
+    }
+
     const newFile = {
         EventID: directory.dir[0].files.length + 1,
-        file_name,
+        filename,
         suffix,
-        Message: message,
-        readOnly: true,
-        deletable: true,
-        path: directory.dir[0]._foldername,
-        date
+        Message,
+        readOnly,
+        deletable,
+        path: directory.dir[0]._foldername
     };
     await Directory.updateOne({ "dir._foldername": folder_name}, 
                             { $push: { "dir.$.files": newFile } });
 
-    res.status(201).json({message: "File added successfully"});
+    res.status(201).json(newFile);
 });
 
 module.exports = {
     getFolders,
     getFiles,
     getFile,
-    addFile,
-    createFolder
+    createFolder,
+    addFile
 };
