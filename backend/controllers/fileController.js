@@ -27,14 +27,30 @@ const getFiles = asyncHandler(async(req, res) => {
         throw new Error("Folder not found");
     }
 
-    const files = directory.dir[0];
+    const files = directory.dir[0].files;
     res.status(200).json(files);
 });
 
+//@desc one file in the folder
+//@route GET /api/files/dashboard/folder/:folder_name/:event_id
+//@access private
 
+const getFile = asyncHandler(async(req, res) => {
+    const {folder_name, event_id} = req.params;
+    
+    const directory = await Directory.findOne({ "dir._foldername": folder_name }, { "dir.$": 1 });
+    if (!directory) {
+        res.status(404);
+        throw new Error("Folder not found");
+    }
+
+    const matchedFile = directory.dir[0].files.find(file => file.EventID === event_id);
+    res.status(200).json(matchedFile);
+});
 
 
 module.exports = {
     getFolders,
-    getFiles
+    getFiles,
+    getFile
 };
