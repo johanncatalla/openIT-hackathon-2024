@@ -40,6 +40,7 @@
         <v-btn type="submit" base-color="success">Register</v-btn>
       </v-form>
       <div>
+        <br/>
         <a @click="toggleRegister">
           {{ isRegister ? "Already have an account? Login" : "Don't have an account? Register" }}
         </a>
@@ -49,7 +50,9 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
+
   data() {
     return {
       username: "",
@@ -60,10 +63,25 @@ export default {
   },
   methods: {
     handleLogin() {
-      console.log(this.username, this.password);
+      axios.post("http://localhost:3115/api/users/login", {
+        username: this.username,
+        password: this.password,
+      }).then((res) => {
+        console.log(res.data);
+      }).catch((err) => {
+        console.log(err);
+      });
     },
     handleRegister() {
-      console.log(this.username, this.password);
+      axios.post("http://localhost:3115/api/users/register", {
+        username: this.username,
+        email: this.email,
+        password: this.password,
+      }).then((res) => {
+        console.log(res.data);
+      }).catch((err) => {
+        console.log(err);
+      });
     },
     toggleRegister() {
       this.isRegister = !this.isRegister;
