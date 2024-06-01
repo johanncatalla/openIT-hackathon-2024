@@ -27,7 +27,7 @@ const getFiles = asyncHandler(async(req, res) => {
         throw new Error("Folder not found");
     }
 
-    const files = directory.dir[0].files;
+    const files = directory.dir[0];
     res.status(200).json(files);
 });
 
@@ -44,8 +44,7 @@ const getFile = asyncHandler(async(req, res) => {
         throw new Error("Folder not found");
     }
 
-    const matchedFile = directory.dir[0].files.find(file => file.EventID === event_id);
-    res.status(200).json(matchedFile);
+    const matchedFile = directory.dir[0].files;
 });
 
 
