@@ -1,5 +1,5 @@
 <template>
-  <DataTable :value="folders" tableStyle="min-width: 50rem">
+  <DataTable :value="folders" tableStyle="min-width: 50rem" >
     <Column header="Name">
       <template #body="slotProps">
         <span class="pi pi-folder"></span>  
@@ -38,6 +38,9 @@ export default {
   },
   methods: {
     viewFolderContent(files) {
+      if (files.length ===0) {
+        return;
+      }
       this.$emit('view-folder-content', files);
     },
     selectedFile(foldername) {
