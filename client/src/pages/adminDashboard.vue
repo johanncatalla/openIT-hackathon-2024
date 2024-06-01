@@ -28,9 +28,7 @@ export default {
             home: {
                 icon: 'pi pi-home'
             },
-            items: [
-                { label: 'Home' },
-                { label: 'Dashboard', to: '/Dashboard' }]
+            items: []
         }
     },
     props: {

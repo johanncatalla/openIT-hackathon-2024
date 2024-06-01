@@ -2,8 +2,15 @@
     <div class="buttonview">
         <Toast />
         <FileUpload class="file-upload-button" mode="basic" name="demo[]" :url="uploadUrl" accept=".txt,.xml,.json" :maxFileSize="100000000" @upload="onUpload" :auto="true" chooseLabel="Upload File" :disabled="!selectedFolder"/>   
-        <ButtonClick label="Add folder" class="button" @click="onAddFolder" />
+        <ButtonClick label="Add folder" class="button" @click="setAddFolder" :disabled="addFolderVisible"/>
+        <FloatLabel class="input" :hidden="!addFolder">
+            <InputText type="text" v-model="value" variant="filled" />
+            <label for="username">Foldername</label>
+        </FloatLabel>
+        <ButtonClick label="Add" class="button2" @click="onAddFolder" :hidden="!addFolder"/>
+
     </div>
+    
     <div class="table-viewer">
         <folderView :folders="folders" @view-folder-content="viewFolderContent" @selected-folder="setSelectedFolder" v-if="!isViewFile" />
         <fileView :files="files" @go-back="backFolderView" @selected-file="viewFile" v-else/>
@@ -36,13 +43,16 @@ export default {
     },
     data() {
         return {
+            value: null,
             folders: [],
             isViewFile: false
             ,files: []
             ,selectedFile: ''
             ,selectedFileContent: ''
-            ,selectedFolder: ''
-            ,fileMessage: ''
+            ,selectedFolder: false
+            ,fileMessage: '',
+            addFolder: false,
+            addFolderVisible: false
         };
     },
     computed: {
@@ -79,6 +89,7 @@ export default {
             this.selectedFile = '';
             this.selectedFileContent = '';
             this.selectedFolder = '';
+            this.addFolderVisible = false;
         },
         viewFile(file) {
             console.log(file);
@@ -98,26 +109,31 @@ export default {
         },
         setSelectedFolder(foldername) {
             this.selectedFolder = foldername;
+            this.addFolderVisible = true;
             console.log(foldername);
         },
-        onUpload() {
-            axios.post(``, {
-                
-            }, {
-                headers: {
-                    Authorization: `Bearer ${this.AccessToken}`,
-                },
+        onUpload(event) {
+            const file = event.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            axios.post(`http://localhost:3115/api/files/upload`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${this.AccessToken}`,
+            },
             }).then((res) => {
-                console.log(res);
-                this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-            }).catch((err) => {
-                console.log(err);
-            });
+            console.log(res);
+        
             this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+            }).catch((err) => {
+            console.log(err);
+            });
         },
         onAddFolder() {
+
             axios.post('http://localhost:3115/api/files/dashboard', {
-            _foldername: "New Folder 101"
+            _foldername: this.value
             }, {
             headers: {
                 Authorization: `Bearer ${this.AccessToken}`,
@@ -126,11 +142,20 @@ export default {
             console.log(res);
             this.getFolders();
             this.$toast.add({ severity: 'info', summary: 'Success', detail: 'Added Folder', life: 3000 });
+            this.addFolder = false;
+            this.value = '';
+            this.setAddFolderVisible = false;
             }).catch((err) => {
             console.log(err);
             });
-        }
+        },
+        setAddFolder() {
+            this.addFolder = true;
+        },
+        setAddFolderVisible() {
+            this.addFolderVisible = true;
     }
+}
 };
 
 </script>
@@ -159,6 +184,23 @@ textarea{
     margin-bottom: 10px;
 }
 
+.buttonview .input{
+    margin: 0px;
+    margin-left: 10px;
+    font-family: var(--font-family);
+    font-weight: normal;
+    background: var(--surface-ground);
+    background-color: #f8f8f8;
+    border: 1px solid gray;
+    border-radius: 5px;
+    color: var(--text-color);
+    padding: 1rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    height: 45px;
+    
+}
+
 .file-upload-button{
     margin-bottom: 10px;
 }
@@ -167,6 +209,13 @@ textarea{
     margin-left: 10px;
     background-color: lightcoral;
 }
+
+.button2 {
+    margin-bottom: 10px;
+    margin-left: 10px;
+    background-color: lightgreen;
+}
+
 .p-button{
     padding: 10px 20px;
 

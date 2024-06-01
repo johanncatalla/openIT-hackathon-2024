@@ -1,11 +1,11 @@
 <template>
-  <DataTable :value="folders" tableStyle="min-width: 50rem" paginator rows="10" >
+  <DataTable :value="folders" tableStyle="min-width: 50rem" paginator rows="30" >
     <Column header="Name">
       <template #body="slotProps">
         <span class="pi pi-folder"></span>  
         <a 
           style="color: black; font-weight: bold; margin-left: 2px;" 
-          @click="{viewFolderContent(slotProps.data.files); selectedFile(slotProps.data._foldername)}"
+          @click="{viewFolderContent(slotProps.data.files); selectedFile(slotProps.data._foldername); addStack(slotProps.data._foldername)}"
         >
           {{ slotProps.data._foldername }}
         </a>

@@ -24,6 +24,8 @@ import Button from 'primevue/button';
 import Tree from 'primevue/tree';
 import Breadcrumb from 'primevue/breadcrumb';
 import FileUpload from 'primevue/fileupload';
+import FloatLabel from 'primevue/floatlabel';
+import InputText from 'primevue/inputtext';
 
 const app = createApp(App)
 app.use(PrimeVue)
@@ -38,6 +40,8 @@ app.component('ButtonClick', Button)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Breadcrumb', Breadcrumb)
 app.component('FileUpload', FileUpload)
+app.component('FloatLabel', FloatLabel)
+app.component('InputText', InputText)
 
 registerPlugins(app)
 
