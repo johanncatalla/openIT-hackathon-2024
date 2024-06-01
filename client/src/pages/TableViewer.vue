@@ -17,7 +17,7 @@ import fileView from '@/components/fileView.vue';
 import axios from 'axios';
 
 export default {
-    name: 'Test',
+    name: 'TableViewer',
     components: {
         folderView,
         fileView

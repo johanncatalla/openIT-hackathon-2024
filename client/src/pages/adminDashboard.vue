@@ -14,13 +14,14 @@
                 <FileUpload mode="basic" name="demo[]" url="/api/upload" accept=".txt,.xml,.json" :maxFileSize="100000000" @upload="onUpload" :auto="true" chooseLabel="Browse" />
             </div>
         </div>
-
+        <TableViewer></TableViewer>
         <div v-if="activeTab === 'settings'">
         </div>
     </div>
 </template>
 
 <script>
+import TableViewer from './TableViewer.vue';
 
 export default {
     data() {
@@ -33,6 +34,9 @@ export default {
                 { label: 'Home' },
                 { label: 'Dashboard', to: '/Dashboard' }]
         }
+    },
+    components: {
+        TableViewer
     },
     methods: {
         onUpload() {
