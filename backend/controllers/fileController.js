@@ -124,5 +124,6 @@ module.exports = {
     getFolders,
     getFiles,
     getFile,
+    addFile,
     createFolder
 };
