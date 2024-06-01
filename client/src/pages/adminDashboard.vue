@@ -12,9 +12,14 @@
             <div class="card flex justify-content-center">
                 <Toast />
                 <FileUpload mode="basic" name="demo[]" url="/api/upload" accept=".txt,.xml,.json" :maxFileSize="100000000" @upload="onUpload" :auto="true" chooseLabel="Browse" />
+                
             </div>
+            <div class="card flex justify-content-center">
+                <TableViewer class="table"></TableViewer>
+            </div>
+            
         </div>
-        <TableViewer></TableViewer>
+        
         <div v-if="activeTab === 'settings'">
         </div>
     </div>
@@ -48,6 +53,7 @@ export default {
 </script>
 
 <style>
+
 .tab-menu {
     list-style-type: none;
     display: flex;

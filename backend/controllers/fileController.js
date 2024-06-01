@@ -97,25 +97,26 @@ const createFolder = asyncHandler(async(req, res) => {
 
 const addFile = asyncHandler(async(req, res) => {
     const {folder_name} = req.params;
+    
     const {file_name, suffix, message, access, deletable, path, date} = req.body;
     const directory = await Directory.findOne({ "dir._foldername": folder_name }, { "dir.$": 1 });
-    console.log(directory);
+
     if (!directory) {
         res.status(404);
         throw new Error("Folder not found");
     }
     const newFile = {
         EventID: directory.dir[0].files.length + 1,
-        filename,
+        filename: file_name,
         suffix,
-        Message,
+        Message: message,
         readOnly: true,
         deletable: true,
         path: directory.dir[0]._foldername,
         date
     };
-    directory.dir[0].files.push(newFile);
-    await directory.save();
+    await Directory.updateOne({ "dir._foldername": folder_name}, 
+                            { $push: { "dir.$.files": newFile } });
 
     res.status(201).json({message: "File added successfully"});
 });
