@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// FILES
 const fileSchema = mongoose.Schema({
     EventID: {
         type: Number,
@@ -57,8 +58,56 @@ const directorySchema = mongoose.Schema({
     collection: 'files'
 });
 
+
+// CHANGEDFILES
+const changedFileSchema = mongoose.Schema({
+    EventID: {
+        type: Number,
+        required: true
+    },
+    filename: {
+        type: String,
+        required: [true, "Please add the filename"]
+    },
+    suffix: {
+        type: String,
+        required: [true, "Please add the suffix"]
+    },
+    Message: {
+        type: String,
+        required: [true, "Please add the message"]
+    },
+    readOnly: {
+        type: Boolean, 
+        required: [true, "Please add the access"]
+    },
+    deletable: {
+        type: Boolean,
+        required: [true, "Please confirm if deletable"]
+    },
+    path: {
+        type: String,
+        required: [true, "Please add the path"]
+    }
+}, {
+    timestamps: true,
+    collection: 'files'
+});
+
+
+const changesSchema = mongoose.Schema({
+    changedFiles: {
+        type: [changedFileSchema]
+    }
+}, {
+    timestamps: true,
+    collection: 'files'
+});
+
 const File = mongoose.model("File", fileSchema);
 const Folder = mongoose.model("Folder", folderSchema);
 const Directory = mongoose.model("Directory", directorySchema);
+const ChangedFiles = mongoose.model("ChangedFiles", changedFileSchema);
+const Changes = mongoose.model("Changes", changesSchema);
 
-module.exports = { File, Folder, Directory };
+module.exports = { File, Folder, Directory, ChangedFiles, Changes };
