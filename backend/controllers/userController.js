@@ -7,18 +7,18 @@ const User = require("../models/userModel");
 //@route POST /api/users/register
 //@access public
 
-const registerUser = asyncHandler(async(req, res) => {
-    const {username, email, password} = req.body;
+const registerUser = asyncHandler(async (req, res) => {
+    const { username, email, password } = req.body;
     if (!username || !email || !password) {
         res.status(400);
         throw new Error("All fields are mandatory!");
     }
-    const userAvailable = await User.findOne({email});
+    const userAvailable = await User.findOne({ email });
     if (userAvailable) {
         res.status(400);
         throw new Error("User already registered!");
     }
-    
+
     // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log("Hashed Password: ", hashedPassword);
@@ -28,26 +28,26 @@ const registerUser = asyncHandler(async(req, res) => {
         password: hashedPassword
     });
     console.log(`User created ${user}`);
-    if(user) {
-        res.status(201).json({_id: user.id, email: user.email});
+    if (user) {
+        res.status(201).json({ _id: user.id, email: user.email });
     } else {
         res.status(400);
         throw new Error("User data is not valid");
     }
-    res.json({message: "Register the user"});
+    res.json({ message: "Register the user" });
 });
 
 //@desc Login a user
 //@route POST /api/users/login
 //@access public
 
-const loginUser = asyncHandler(async(req, res) => {
-    const {username, password} = req.body;
-    if (!username || !password) {
+const loginUser = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
         res.status(400);
-        throw new Error ("All fields are mandatory!");
+        throw new Error("All fields are mandatory!");
     }
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email });
 
     // compare password with hashedpassword
     if (user && (await bcrypt.compare(password, user.password))) {
@@ -55,12 +55,13 @@ const loginUser = asyncHandler(async(req, res) => {
             user: {
                 username: user.username,
                 email: user.email,
-                id: user.id
+                id: user.id,
+                userType: user.userType,
             },
-        }, 
-        process.env.ACCESS_TOKEN_SECRET
+        },
+            process.env.ACCESS_TOKEN_SECRET
         );
-        res.status(200).json({accessToken});
+        res.status(200).json({ accessToken });
 
     } else {
         res.status(401);
@@ -77,4 +78,4 @@ const currentUser = asyncHandler((req, res) => {
 });
 
 
-module.exports = {registerUser, loginUser, currentUser};
+module.exports = { registerUser, loginUser, currentUser };
