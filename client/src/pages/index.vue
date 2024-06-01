@@ -3,10 +3,10 @@
     <div class="auth-form">
       <v-form @submit.prevent="handleLogin" v-if="!isRegister">
         <h1 class="form-title">Login</h1>
-        <p class="subtitle">Enter your username and password to login<br/><br/></p>
+        <p class="subtitle">Enter your email and password to login<br/><br/></p>
         <v-text-field
-          v-model="username"
-          label="Username"
+          v-model="email"
+          label="Email"
           required
         ></v-text-field>
         <v-text-field
@@ -50,24 +50,35 @@
 </template>
 
 <script>
+import router from "@/router";
 import axios from "axios";
 export default {
-
+  name: "Index",
   data() {
     return {
       username: "",
       password: "",
       email: "",
       isRegister: false,
+      accessToken: "",
     };
   },
   methods: {
     handleLogin() {
       axios.post("http://localhost:3115/api/users/login", {
-        username: this.username,
+        email: this.email,
         password: this.password,
       }).then((res) => {
-        console.log(res.data);
+        this.accessToken = res.data.accessToken;
+        this.username = "";
+        this.password = "";
+        this.email = "";
+        router.push({
+          name: "dashboard",
+          params: {
+            accessToken: this.accessToken,
+          },
+        });
       }).catch((err) => {
         console.log(err);
       });
