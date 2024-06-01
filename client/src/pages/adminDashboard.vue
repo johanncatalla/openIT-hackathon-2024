@@ -40,7 +40,7 @@ export default {
     },
     methods: {
         onAdvancedUpload() {
-
+            
             this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
         }
     }
