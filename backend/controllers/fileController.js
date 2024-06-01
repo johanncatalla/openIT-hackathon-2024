@@ -55,48 +55,11 @@ const getFile = asyncHandler(async(req, res) => {
     
 });
 
-//@desc Create New Folder
-//@route POST /api/dashboard
-//@access private
 
-const createFolder = asyncHandler(async(req, res) => {
-    console.log("The request body is :", req.body);
-    const {_foldername, path, files} = req.body;
 
-    if (!_foldername) {
-        res.status(400);
-        throw new Error("Folder name is mandatory!");
-    }
-
-    if(req.user.userType !== "admin") {
-        res.status(403);
-        throw new Error("User don't have permission to create folder");
-    }
-
-    const directoryWithFolder = await Directory.findOne({ "dir._foldername": _foldername });
-    if (directoryWithFolder) {
-        res.status(400);
-        throw new Error("Folder name already exists!");
-    }
-
-    const newFolder = new Folder({ _foldername, path, files });
-    const directory = await Directory.findOne();
-
-    if (!directory) {
-        res.status(400);
-        throw new Error("Directory not found");
-    }
-
-    await Directory.updateOne(
-        { _id: directory._id },
-        { $push: { dir: newFolder } }
-    );
-    res.status(201).json(newFolder);
-});
 
 module.exports = {
     getFolders,
     getFiles,
-    getFile,
-    createFolder
+    getFile
 };

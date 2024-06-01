@@ -23,22 +23,21 @@ import ToastService from 'primevue/toastservice'
 import Button from 'primevue/button';
 import Tree from 'primevue/tree';
 import Breadcrumb from 'primevue/breadcrumb';
-
-
-
-
+import FileUpload from 'primevue/fileupload';
 
 const app = createApp(App)
 app.use(PrimeVue)
 app.use(ToastService)
 
 app.component('TabMenu', TabMenu)
-app.component('ToastMessage', Toast)
+// eslint-disable-next-line vue/multi-word-component-names
+app.component('Toast', Toast)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Tree', Tree)
 app.component('ButtonCLick', Button)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Breadcrumb', Breadcrumb)
+app.component('FileUpload', FileUpload)
 
 registerPlugins(app)
 

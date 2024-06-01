@@ -9,6 +9,14 @@
             <div class="card flex justify-content-center">
                 <Breadcrumb :home="home" :model="items" />
             </div>
+            <div class="card">
+                <Toast />
+                <FileUpload name="demo[]" url="/api/upload" @upload="onAdvancedUpload($event)" :multiple="true" accept="text/*" :maxFileSize="1000000000000">
+                    <template #empty>
+                        <p>Drag and drop files to here to upload.</p>
+                    </template>
+                </FileUpload>
+            </div>
         </div>
 
         <div v-if="activeTab === 'settings'">
@@ -17,7 +25,6 @@
 </template>
 
 <script>
-
 
 export default {
     data() {
@@ -30,6 +37,12 @@ export default {
                 { label: 'Home' },
                 { label: 'Dashboard', to: '/Dashboard' }]
         }
+    },
+    methods: {
+        onAdvancedUpload() {
+
+            this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+        }
     }
 };
 
@@ -41,18 +54,27 @@ export default {
     display: flex;
     justify-content: left;
     padding: 0;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
 }
 
 .tab-menu li {
     cursor: pointer;
     padding: 10px;
+    border-radius: 10px;
 }
 
 .tab-menu li.active {
     background-color: #ccc;
+    
 }
 
 .card {
     background-color: #ccc;
+    background: var(--surface-card);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
 }
 </style>
