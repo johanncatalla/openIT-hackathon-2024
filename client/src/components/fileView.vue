@@ -1,6 +1,6 @@
 
 <template>
-    <button @click="goBack"><span class="pi pi-angle-left"></span>Back</button>
+    <button @click="goBack" style="color: black;"><span class="pi pi-angle-left"></span>Back</button>
     <DataTable :value="files" tableStyle="min-width: 50rem">
     <Column header="Name">
     <template #body="slotProps" class="fileIcon">

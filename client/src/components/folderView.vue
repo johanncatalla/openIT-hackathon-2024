@@ -38,9 +38,6 @@ export default {
   },
   methods: {
     viewFolderContent(files) {
-      if (files.length ===0) {
-        return;
-      }
       this.$emit('view-folder-content', files);
     },
     selectedFile(foldername) {

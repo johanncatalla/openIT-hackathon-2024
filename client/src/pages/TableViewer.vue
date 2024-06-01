@@ -1,11 +1,15 @@
 <template>
+    <div>
+        <Toast />
+        <FileUpload class="file-upload-button" mode="basic" name="demo[]" :url="uploadUrl" accept=".txt,.xml,.json" :maxFileSize="100000000" @upload="onUpload" :auto="true" chooseLabel="Upload File" :disabled="!selectedFolder"/>         
+    </div>
     <div class="table-viewer">
         <folderView :folders="folders" @view-folder-content="viewFolderContent" @selected-folder="setSelectedFolder" v-if="!isViewFile" />
         <fileView :files="files" @go-back="backFolderView" @selected-file="viewFile" v-else/>
     </div>
     <div class="file-content" v-if="selectedFileContent">
         <div>
-            <h1>{{ selectedFileContent.filename }}</h1>
+            <h1 id="filename">{{ "".concat(selectedFileContent.filename, selectedFileContent.suffix) }}</h1>
             <textarea :readonly="selectedFileContent.readOnly" v-model="selectedFileContent.Message"></textarea>
         </div>
     </div>
@@ -14,6 +18,7 @@
 <script>
 import folderView from '@/components/folderView.vue';
 import fileView from '@/components/fileView.vue';
+import FileUpload from 'primevue/fileupload';
 import axios from 'axios';
 
 export default {
@@ -32,8 +37,12 @@ export default {
             ,selectedFileContent: ''
             ,selectedFolder: ''
             ,fileMessage: ''
-            ,
         };
+    },
+    computed: {
+        uploadUrl() {
+            return `http://localhost:3115/api/files/dashboard/folder/${this.selectedFolder}`;
+        }
     },
     mounted() {
         this.getFolders();
@@ -83,6 +92,22 @@ export default {
         },
         setSelectedFolder(foldername) {
             this.selectedFolder = foldername;
+            console.log(foldername);
+        },
+        onUpload() {
+            axios.post(``, {
+                
+            }, {
+                headers: {
+                    Authorization: `Bearer ${this.testAccessToken}`,
+                },
+            }).then((res) => {
+                console.log(res);
+                this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+            }).catch((err) => {
+                console.log(err);
+            });
+            this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
         }
     },
 };
@@ -99,6 +124,24 @@ textarea{
     font-size: 16px;
     resize: none;
     color: black;
+}
+
+#filename{
+    color: black;
+    margin-top: 10px;
+}
+
+.file-upload-button{
+    margin-bottom: 10px;
+}
+
+.p-button{
+    padding: 10px 20px;
+
+}
+
+.p-button svg{
+    margin-right: 10px;
 }
 
 </style>
