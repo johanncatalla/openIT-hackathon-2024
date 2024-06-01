@@ -9,13 +9,9 @@
             <div class="card flex justify-content-center">
                 <Breadcrumb :home="home" :model="items" />
             </div>
-            <div class="card">
+            <div class="card flex justify-content-center">
                 <Toast />
-                <FileUpload name="demo[]" url="/api/upload" @upload="onAdvancedUpload($event)" :multiple="true" accept="text/*" :maxFileSize="1000000000000">
-                    <template #empty>
-                        <p>Drag and drop files to here to upload.</p>
-                    </template>
-                </FileUpload>
+                <FileUpload mode="basic" name="demo[]" url="/api/upload" accept=".txt,.xml,.json" :maxFileSize="100000000" @upload="onUpload" :auto="true" chooseLabel="Browse" />
             </div>
         </div>
 
@@ -39,8 +35,7 @@ export default {
         }
     },
     methods: {
-        onAdvancedUpload() {
-            
+        onUpload() {
             this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
         }
     }
