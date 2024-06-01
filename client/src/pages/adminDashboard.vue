@@ -6,7 +6,8 @@
         </ul>
 
         <div v-if="activeTab === 'dashboard'">
-            <div >
+            <div class="card flex justify-content-center">
+                <Breadcrumb :home="home" :model="items" />
             </div>
         </div>
 
@@ -16,13 +17,22 @@
 </template>
 
 <script>
+
+
 export default {
     data() {
         return {
-            activeTab: 'dashboard'
-        };
+            activeTab: 'dashboard',
+            home: {
+                icon: 'pi pi-home'
+            },
+            items: [
+                { label: 'Home' },
+                { label: 'Dashboard', to: '/Dashboard' }]
+        }
     }
 };
+
 </script>
 
 <style>
@@ -39,6 +49,10 @@ export default {
 }
 
 .tab-menu li.active {
+    background-color: #ccc;
+}
+
+.card {
     background-color: #ccc;
 }
 </style>

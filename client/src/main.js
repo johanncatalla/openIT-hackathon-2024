@@ -19,8 +19,13 @@ import 'primeicons/primeicons.css'
 import TabMenu from 'primevue/tabmenu';
 import Toast from 'primevue/toast'
 import ToastService from 'primevue/toastservice'
-import Tree from 'primevue/tree';
+
 import Button from 'primevue/button';
+import Tree from 'primevue/tree';
+import Breadcrumb from 'primevue/breadcrumb';
+
+
+
 
 
 const app = createApp(App)
@@ -29,8 +34,11 @@ app.use(ToastService)
 
 app.component('TabMenu', TabMenu)
 app.component('ToastMessage', Toast)
-app.component('TreeView', Tree)
+// eslint-disable-next-line vue/multi-word-component-names
+app.component('Tree', Tree)
 app.component('ButtonCLick', Button)
+// eslint-disable-next-line vue/multi-word-component-names
+app.component('Breadcrumb', Breadcrumb)
 
 registerPlugins(app)
 
