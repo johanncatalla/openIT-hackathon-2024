@@ -8,7 +8,7 @@
         <div v-if="activeTab === 'dashboard'">
             <div class="card flex justify-content-center">
                 <Breadcrumb :home="home" :model="items" />
-                <TableViewer class="table"></TableViewer>
+                <TableViewer class="table" :AccessToken="accessToken"></TableViewer>
             </div>
             
         </div>
@@ -33,10 +33,14 @@ export default {
                 { label: 'Dashboard', to: '/Dashboard' }]
         }
     },
+    props: {
+        accessToken: {
+            type: String,
+            required: true
+        }
+    },
     components: {
         TableViewer
-    },
-    methods: {
     }
 };
 

@@ -1,7 +1,7 @@
 
 <template>
     <button @click="goBack" style="color: black;"><span class="pi pi-angle-left"></span>Back</button>
-    <DataTable :value="files" tableStyle="min-width: 50rem">
+    <DataTable :value="files" tableStyle="min-width: 50rem"  paginator rows="10">
     <Column header="Name">
     <template #body="slotProps" class="fileIcon">
         <span class="pi pi-file"></span>
@@ -67,5 +67,9 @@ input[type="checkbox"] {
 a {
     color: black;
     font-weight: bold;
+}
+
+.p-paginator {
+    margin-top: 1rem;
 }
 </style>

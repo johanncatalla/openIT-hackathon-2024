@@ -1,5 +1,5 @@
 <template>
-  <DataTable :value="folders" tableStyle="min-width: 50rem" >
+  <DataTable :value="folders" tableStyle="min-width: 50rem" paginator rows="10" >
     <Column header="Name">
       <template #body="slotProps">
         <span class="pi pi-folder"></span>  

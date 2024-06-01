@@ -28,11 +28,16 @@ export default {
         folderView,
         fileView
     },
+    props: {
+        AccessToken: {
+            type: String,
+            required: true
+        }
+    },
     data() {
         return {
             folders: [],
-            testAccessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoiNjY1YjA2OGRlNmNmNzU0ZDhiOTMzZmRkIiwidXNlclR5cGUiOiJhZG1pbiJ9LCJpYXQiOjE3MTcyNjIwODN9.Nuhte-jlkaGMxKgQ_r-dnvhxgHw-OmTIPV9YQiY-jdI"
-            ,isViewFile: false
+            isViewFile: false
             ,files: []
             ,selectedFile: ''
             ,selectedFileContent: ''
@@ -52,7 +57,7 @@ export default {
         getFolders() {
             axios.get('http://localhost:3115/api/files/dashboard', {
                 headers: {
-                    Authorization: `Bearer ${this.testAccessToken}`,
+                    Authorization: `Bearer ${this.AccessToken}`,
                 },
             }).then((res) => {
                 const response = res.data[0];
@@ -80,7 +85,7 @@ export default {
             this.selectedFile = file;
             axios.get(`http://localhost:3115/api/files/dashboard/folder/${this.selectedFolder}/${file}`, {
                 headers: {
-                    Authorization: `Bearer ${this.testAccessToken}`,
+                    Authorization: `Bearer ${this.AccessToken}`,
                 },
             }).then((res) => {
                 const response = res.data;
@@ -100,7 +105,7 @@ export default {
                 
             }, {
                 headers: {
-                    Authorization: `Bearer ${this.testAccessToken}`,
+                    Authorization: `Bearer ${this.AccessToken}`,
                 },
             }).then((res) => {
                 console.log(res);
@@ -115,7 +120,7 @@ export default {
             _foldername: "New Folder 101"
             }, {
             headers: {
-                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoiNjY1YjA2OGRlNmNmNzU0ZDhiOTMzZmRkIiwidXNlclR5cGUiOiJhZG1pbiJ9LCJpYXQiOjE3MTcyNjIwODN9.Nuhte-jlkaGMxKgQ_r-dnvhxgHw-OmTIPV9YQiY-jdI`,
+                Authorization: `Bearer ${this.AccessToken}`,
             },
             }).then((res) => {
             console.log(res);
