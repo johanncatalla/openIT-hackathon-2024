@@ -18,13 +18,14 @@
                 </FileUpload>
             </div>
         </div>
-
+        <TableViewer></TableViewer>
         <div v-if="activeTab === 'settings'">
         </div>
     </div>
 </template>
 
 <script>
+import TableViewer from './TableViewer.vue';
 
 export default {
     data() {
@@ -37,6 +38,9 @@ export default {
                 { label: 'Home' },
                 { label: 'Dashboard', to: '/Dashboard' }]
         }
+    },
+    components: {
+        TableViewer
     },
     methods: {
         onAdvancedUpload() {
