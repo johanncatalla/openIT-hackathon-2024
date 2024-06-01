@@ -13,18 +13,22 @@ import App from './App.vue'
 // Composables
 import { createApp } from 'vue'
 import PrimeVue from 'primevue/config'
-import 'primevue/resources/themes/aura-light-green/theme.css'
-import 'primevue/resources/primevue.min.css'
+import 'primevue/resources/themes/aura-light-blue/theme.css'
 import 'primeicons/primeicons.css'
 
 import TabMenu from 'primevue/tabmenu';
-
+import Toast from 'primevue/toast'
+import ToastService from 'primevue/toastservice'
+import Tree from 'primevue/tree';
 
 
 const app = createApp(App)
 app.use(PrimeVue)
+app.use(ToastService)
 
 app.component('TabMenu', TabMenu)
+app.component('ToastMessage', Toast)
+app.component('TreeView', Tree)
 
 registerPlugins(app)
 

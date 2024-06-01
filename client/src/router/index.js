@@ -10,7 +10,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 
 import index from '@/pages/index.vue'
-import dashboard from '@/pages/dashboard.vue'
+import adminDashboard from '@/pages/adminDashboard.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,9 +21,9 @@ const router = createRouter({
       component: index
     },
     {
-      path: '/dashboard/:accessToken',
-      name: 'dashboard',
-      component: dashboard,
+      path: '/adminDashboard/:accessToken',
+      name: 'adminDashboard',
+      component: adminDashboard,
       props: true
     }
   ]

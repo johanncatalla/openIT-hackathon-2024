@@ -74,7 +74,7 @@ export default {
         this.password = "";
         this.email = "";
         router.push({
-          name: "dashboard",
+          name: "adminDashboard",
           params: {
             accessToken: this.accessToken,
           },

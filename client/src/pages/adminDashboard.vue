@@ -6,6 +6,7 @@
         </ul>
 
         <div v-if="activeTab === 'dashboard'">
+            
         </div>
 
         <div v-if="activeTab === 'settings'">
@@ -27,7 +28,7 @@ export default {
 .tab-menu {
     list-style-type: none;
     display: flex;
-    justify-content: space-between;
+    justify-content: left;
     padding: 0;
 }
 
