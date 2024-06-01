@@ -42,8 +42,8 @@ const registerUser = asyncHandler(async(req, res) => {
 //@access public
 
 const loginUser = asyncHandler(async(req, res) => {
-    const {email, password} = req.body;
-    if (!email || !password) {
+    const {username, password} = req.body;
+    if (!username || !password) {
         res.status(400);
         throw new Error ("All fields are mandatory!");
     }
