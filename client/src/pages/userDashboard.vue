@@ -2,6 +2,7 @@
     <div>
         <ul class="tab-menu">
             <li :class="{ active: activeTab === 'dashboard' }" @click="activeTab = 'dashboard'">Dashboard</li>
+            
         </ul>
 
         <div v-if="activeTab === 'dashboard'">

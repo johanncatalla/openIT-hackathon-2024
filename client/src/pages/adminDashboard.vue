@@ -7,14 +7,10 @@
 
         <div v-if="activeTab === 'dashboard'">
             <div >
-                <h1>Dashboard</h1>
             </div>
         </div>
 
         <div v-if="activeTab === 'settings'">
-            <div >
-                <h1>Settings</h1>
-            </div>
         </div>
     </div>
 </template>
