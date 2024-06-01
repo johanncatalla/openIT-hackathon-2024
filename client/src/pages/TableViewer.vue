@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div class="table-viewer">
         <folderView :folders="folders" @view-folder-content="viewFolderContent" @selected-folder="setSelectedFolder" v-if="!isViewFile" />
         <fileView :files="files" @go-back="backFolderView" @selected-file="viewFile" v-else/>
     </div>
-    <div class="file-content">
+    <div class="file-content" v-if="selectedFileContent">
         <div>
             <h1>{{ selectedFileContent.filename }}</h1>
             <textarea :readonly="selectedFileContent.readOnly" v-model="selectedFileContent.Message"></textarea>
@@ -100,4 +100,5 @@ textarea{
     resize: none;
     color: black;
 }
+
 </style>
