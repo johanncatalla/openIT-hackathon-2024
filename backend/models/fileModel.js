@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const fileSchema = mongoose.Schema({
-    event_id: {
+    EventID: {
         type: Number,
         required: true
     },

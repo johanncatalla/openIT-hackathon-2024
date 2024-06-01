@@ -20,17 +20,19 @@ const getFolders = asyncHandler(async(req, res) => {
 
 const getFiles = asyncHandler(async(req, res) => {
     const {folder_name} = req.params;
-    console.log(`Searching for folder: ${folder_name}`);
-    
+
     const directory = await Directory.findOne({ "dir._foldername": folder_name }, { "dir.$": 1 });
     if (!directory) {
         res.status(404);
         throw new Error("Folder not found");
     }
 
-    const files = directory.dir[0].files;
+    const files = directory.dir[0];
     res.status(200).json(files);
 });
+
+
+
 
 module.exports = {
     getFolders,
