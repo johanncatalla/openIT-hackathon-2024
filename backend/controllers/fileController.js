@@ -151,7 +151,7 @@ const addFile = asyncHandler(async(req, res) => {
 //@route POST /api/files/dashboard/folder/:folder_name/:event_id
 //@access private
 
-const update_changeFile = asyncHandler(async(req, res) => {
+const update_changedFile = asyncHandler(async(req, res) => {
     const {folder_name, event_id} = req.params;
 
     if(req.user.userType !== "admin") {
@@ -213,11 +213,21 @@ const update_changeFile = asyncHandler(async(req, res) => {
 
 });
 
+//@desc edited data will initially go to stagedFiles
+//@route POST /api/files/dashboard/folder/:folder_name/:event_id
+//@access private
+
+const update_stagedFile = asyncHandler(async(req, res) => {
+
+
+});
+
 module.exports = {
     getFolders,
     getFiles,
     getFile,
     createFolder,
     addFile,
-    update_changeFile
+    update_changedFile,
+    update_stagedFile
 };

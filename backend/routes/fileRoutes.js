@@ -6,7 +6,8 @@ const {
     getFile,
     addFile,
     createFolder,
-    update_changeFile
+    update_changedFile,
+    update_stagedFile
 } = require("../controllers/fileController");
 
 const validateToken = require("../middleware/validateTokenHandler");
@@ -17,7 +18,8 @@ router.route("/dashboard/folder/:folder_name").get(getFiles);
 router.route("/dashboard/folder/:folder_name/:event_id").get(getFile);
 router.route("/dashboard").post(createFolder);
 router.route("/dashboard/folder/:folder_name").post(addFile);
-router.route("/dashboard/folder/:folder_name/:event_id").post(update_changeFile);
+router.route("/dashboard/folder/:folder_name/:event_id").post(update_changedFile);
+router.route("/dashboard/folder/staged/:event_id").post(update_stagedFile);
 
     
 
