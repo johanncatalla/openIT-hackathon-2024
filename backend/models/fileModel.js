@@ -38,7 +38,7 @@ const fileSchema = mongoose.Schema({
 });
 
 const folderSchema = mongoose.Schema({
-    folder_name: {
+    _foldername: {
         type: String,
         required: [true, "Please add the folder name"]
     },
@@ -53,7 +53,7 @@ const folderSchema = mongoose.Schema({
 });
 
 const directorySchema = mongoose.Schema({
-    folders: {
+    dir: {
         type: [folderSchema]
     }
 }, {
