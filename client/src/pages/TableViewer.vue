@@ -1,7 +1,8 @@
 <template>
-    <div>
+    <div class="buttonview">
         <Toast />
-        <FileUpload class="file-upload-button" mode="basic" name="demo[]" :url="uploadUrl" accept=".txt,.xml,.json" :maxFileSize="100000000" @upload="onUpload" :auto="true" chooseLabel="Upload File" :disabled="!selectedFolder"/>         
+        <FileUpload class="file-upload-button" mode="basic" name="demo[]" :url="uploadUrl" accept=".txt,.xml,.json" :maxFileSize="100000000" @upload="onUpload" :auto="true" chooseLabel="Upload File" :disabled="!selectedFolder"/>   
+        <ButtonClick label="Add folder" class="button" @click="onAddFolder" />
     </div>
     <div class="table-viewer">
         <folderView :folders="folders" @view-folder-content="viewFolderContent" @selected-folder="setSelectedFolder" v-if="!isViewFile" />
@@ -30,7 +31,7 @@ export default {
     data() {
         return {
             folders: [],
-            testAccessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoidGVzdCIsImVtYWlsIjoiMTIzNDU2QGdtYWlsLmNvbSIsImlkIjoiNjY1YWY4NzI1ODBiMjY1OWE0OWFjYWY4IiwidXNlclR5cGUiOiJ1c2VyIn0sImlhdCI6MTcxNzI0NjUxOX0.PZtUmMFknjP9i-b2pNyQtTd3cE4dHw7ftYAsApSdaV8"
+            testAccessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoiNjY1YjA2OGRlNmNmNzU0ZDhiOTMzZmRkIiwidXNlclR5cGUiOiJhZG1pbiJ9LCJpYXQiOjE3MTcyNjIwODN9.Nuhte-jlkaGMxKgQ_r-dnvhxgHw-OmTIPV9YQiY-jdI"
             ,isViewFile: false
             ,files: []
             ,selectedFile: ''
@@ -108,9 +109,25 @@ export default {
                 console.log(err);
             });
             this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+        },
+        onAddFolder() {
+            axios.post('http://localhost:3115/api/files/dashboard', {
+            _foldername: "New Folder 101"
+            }, {
+            headers: {
+                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoiNjY1YjA2OGRlNmNmNzU0ZDhiOTMzZmRkIiwidXNlclR5cGUiOiJhZG1pbiJ9LCJpYXQiOjE3MTcyNjIwODN9.Nuhte-jlkaGMxKgQ_r-dnvhxgHw-OmTIPV9YQiY-jdI`,
+            },
+            }).then((res) => {
+            console.log(res);
+            this.getFolders();
+            this.$toast.add({ severity: 'info', summary: 'Success', detail: 'Added Folder', life: 3000 });
+            }).catch((err) => {
+            console.log(err);
+            });
         }
-    },
+    }
 };
+
 </script>
 <style>
 textarea{
@@ -131,10 +148,20 @@ textarea{
     margin-top: 10px;
 }
 
-.file-upload-button{
+.buttonview{
+    display: flex;
+    justify-content: left;
     margin-bottom: 10px;
 }
 
+.file-upload-button{
+    margin-bottom: 10px;
+}
+.button {
+    margin-bottom: 10px;
+    margin-left: 10px;
+    background-color: lightcoral;
+}
 .p-button{
     padding: 10px 20px;
 

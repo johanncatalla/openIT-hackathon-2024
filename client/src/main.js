@@ -34,7 +34,7 @@ app.component('TabMenu', TabMenu)
 app.component('Toast', Toast)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Tree', Tree)
-app.component('ButtonCLick', Button)
+app.component('ButtonClick', Button)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Breadcrumb', Breadcrumb)
 app.component('FileUpload', FileUpload)
