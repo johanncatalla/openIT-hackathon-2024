@@ -7,13 +7,10 @@ const {
     addFile,
     createFolder,
     update_changedFile,
-<<<<<<< HEAD
     stageFile,
-    viewStagedFiles
-=======
-    update_stagedStatus,
-    stageFile
->>>>>>> 15f0bcef755cd60deb589220e96e59cba7dec913
+    viewStagedFiles,
+    update_stagedStatus
+    
 } = require("../controllers/fileController");
 
 const validateToken = require("../middleware/validateTokenHandler");
@@ -24,11 +21,8 @@ router.route("/dashboard/folder/staged/viewall").get(viewStagedFiles);
 router.route("/dashboard/folder/:folder_name").get(getFiles).post(addFile);
 router.route("/dashboard/folder/:folder_name/:event_id").get(getFile);
 router.route("/dashboard/folder/staged/:event_id").post(stageFile);
-<<<<<<< HEAD
 router.route("/dashboard/folder/changed/:folder_name/:event_id").post(update_changedFile);
-=======
 router.route("/dashboard/folder/staged/:event_id").put(update_stagedStatus);
->>>>>>> 15f0bcef755cd60deb589220e96e59cba7dec913
 
     
 
