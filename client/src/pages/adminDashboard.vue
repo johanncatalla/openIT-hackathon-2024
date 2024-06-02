@@ -73,4 +73,6 @@ export default {
     border-radius: 10px;
     margin-bottom: 1rem;
 }
+
+
 </style>
