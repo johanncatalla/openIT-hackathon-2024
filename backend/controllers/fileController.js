@@ -4,7 +4,9 @@ const {
     Folder,
     Directory,
     ChangedFiles,
-    Changes
+    Changes,
+    StagedFiles,
+    Staged
 } = require("../models/fileModel");
 const { ChangeStream } = require("mongodb");
 
@@ -147,7 +149,7 @@ const addFile = asyncHandler(async(req, res) => {
     res.status(201).json(newFile);
 });
 
-//@desc edited data will initially go to stagedFiles
+//@desc edited data will initially go to changedFiles
 //@route POST /api/files/dashboard/folder/:folder_name/:event_id
 //@access private
 
@@ -213,12 +215,57 @@ const update_changedFile = asyncHandler(async(req, res) => {
 
 });
 
-//@desc edited data will initially go to stagedFiles
-//@route POST /api/files/dashboard/folder/:folder_name/:event_id
+//@desc before publishing, it will first go through the stagedSchema
+//@route POST /api/files/dashboard/folder/staged/:event_id
 //@access private
 
-const update_stagedFile = asyncHandler(async(req, res) => {
+const stageFile = asyncHandler(async(req, res) => {
 
+    const {event_id} = req.params;
+
+    if(req.user.userType !== "admin") {
+        res.status(403);
+        throw new Error("User don't have permission to create folder");
+    }
+
+    console.log("OKKK");
+
+    const {filename, suffix, Message, readOnly, deletable, path, status} = req.body;
+    if (filename === undefined || suffix === undefined || Message === undefined || readOnly === undefined || 
+        deletable  === undefined || path === undefined || status === undefined) {
+        res.status(400);
+        throw new Error("Please fill out the required fields");
+    }
+
+    const editedFile = {
+        EventID: event_id,
+        filename,
+        suffix,
+        Message,
+        readOnly,
+        deletable,
+        path,
+        status
+    };
+
+    console.log("oK")
+    const changes = await Changes.findOne(
+        { "changedFiles.EventID": event_id}, 
+        { "dir.$": 1 });
+
+    if (!changes) {
+        res.status(404);
+        throw new Error("File not found in changedSchema");
+    }
+
+    const allStaged = await Staged.findOne();
+        
+    await Staged.updateOne(
+        { _id: allStaged._id},
+        { $push: { stagedFiles : editedFile } }
+    );
+
+    res.status(200).json(editedFile);
 
 });
 
@@ -229,5 +276,5 @@ module.exports = {
     createFolder,
     addFile,
     update_changedFile,
-    update_stagedFile
+    stageFile
 };
