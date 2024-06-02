@@ -20,7 +20,11 @@
     <div class="file-content" v-if="selectedFileContent">
         <div>
             <h1 id="filename">File Content</h1>
-            <textarea :readonly="selectedFileContent.readOnly" v-model="selectedFileContent.Message"></textarea>
+            <textarea :readonly="selectedFileContent.readOnly" v-model="fileContent" @change="console.log(selectedFileContent.Message)"></textarea>
+            <div class="buttonview">
+                <ButtonClick label="Confirm Change" class="button2" @click="confirmChange" :disabled="selectedFileContent.readOnly"/>
+                <ButtonClick label="Delete" class="button" @click="deleteFile" :disabled="!selectedFileContent.deletable"/>
+            </div>
         </div>
     </div>
 </template>
@@ -56,6 +60,7 @@ export default {
             addFolder: false,
             addFolderVisible: false,
             items: [],
+            fileContent: ""
         };
     },
     computed: {
@@ -106,6 +111,7 @@ export default {
                 const response = res.data;
                 this.selectedFileContent = response;
                 this.fileMessage = response.Message;
+                this.fileContent = this.fileMessage
                 this.items[1] = { label: "".concat(response.filename, response.suffix)};
                 
             }).catch((err) => {
@@ -160,7 +166,45 @@ export default {
         },
         setAddFolderVisible() {
             this.addFolderVisible = true;
-    }
+    },
+        confirmChange() {
+            // map the this.selectedFileContent but change the message
+
+            axios.post(`http://localhost:3115/api/files/dashboard/folder/changed/${this.selectedFolder}/${this.selectedFileContent.EventID}`, {
+                _id : this.selectedFileContent._id,
+                EventID: this.selectedFileContent.EventID,
+                filename: this.selectedFileContent.filename,
+                suffix: this.selectedFileContent.suffix,
+                Message: this.fileContent,
+                readOnly: this.selectedFileContent.readOnly,
+                deletable: this.selectedFileContent.deletable,
+                path: this.selectedFileContent.path,
+                date: this.selectedFileContent.date
+            }
+            , {
+                headers: {
+                    Authorization: `Bearer ${this.AccessToken}`,
+                },
+            }).then((res) => {
+                console.log(res);
+                this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Updated', life: 3000 });
+            }).catch((err) => {
+                console.log(err);
+            });
+        },
+        deleteFile() {
+            axios.delete(`http://localhost:3115/api/files/dashboard/folder/${this.selectedFolder}/${this.selectedFile}`, {
+                headers: {
+                    Authorization: `Bearer ${this.AccessToken}`,
+                },
+            }).then((res) => {
+                console.log(res);
+                this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Deleted', life: 3000 });
+                this.backFolderView();
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
 }
 };
 
