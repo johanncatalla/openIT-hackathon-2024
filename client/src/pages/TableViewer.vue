@@ -2,7 +2,8 @@
     <Breadcrumb :home="home" :model="this.items" />
     <div class="buttonview">
         <Toast />
-        <FileUpload class="file-upload-button" mode="basic" name="demo[]" :url="uploadUrl" accept=".txt,.xml,.json" :maxFileSize="100000000" @upload="onUpload" :auto="true" chooseLabel="Upload File" :disabled="!selectedFolder"/>   
+        <!-- <FileUpload class="file-upload-button" mode="basic" name="demo[]" :url="uploadUrl" accept=".txt,.xml,.json" :maxFileSize="100000000" @upload="onUpload" :auto="true" chooseLabel="Upload File" :disabled="!selectedFolder"/>    -->
+        <input type="file" class="file-upload-button" @change="onUpload" :disabled="!selectedFolder" id="input_file"/>
         <ButtonClick label="Add folder" class="button" @click="setAddFolder" :disabled="addFolderVisible"/>
         <FloatLabel class="input" :hidden="!addFolder">
             <InputText type="text" v-model="value" variant="filled" />
@@ -118,23 +119,23 @@ export default {
             console.log(foldername);
         },
         onUpload(event) {
-            const file = event.files[0];
-            const formData = new FormData();
-            formData.append('file', file);
+                const file = event.target.files[0];
+                const formData = {
+                    file: file.name.split('.')[0],
+                    suffix: file.name.split('.')[1],
+                }
 
-            axios.post(`http://localhost:3115/api/files/upload`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                Authorization: `Bearer ${this.AccessToken}`,
+                axios.post(`http://localhost:3115/api/files/dashboard/folder/${this.selectedFolder}`, formData, {
+                    headers: {
+                        Authorization: `Bearer ${this.AccessToken}`,
+                    },
+                }).then((res) => {
+                    console.log(res);
+                    this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+                }).catch((err) => {
+                    console.log(err);
+                });
             },
-            }).then((res) => {
-            console.log(res);
-        
-            this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-            }).catch((err) => {
-            console.log(err);
-            });
-        },
         onAddFolder() {
 
             axios.post('http://localhost:3115/api/files/dashboard', {

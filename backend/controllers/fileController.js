@@ -14,7 +14,7 @@ const { ChangeStream } = require("mongodb");
 //@route GET /api/files/dashboard
 //@access private
 
-const getFolders = asyncHandler(async(req, res) => {
+const getFolders = asyncHandler(async (req, res) => {
     const directory = await Directory.find();
     res.status(200).json(directory);
 });
@@ -23,8 +23,8 @@ const getFolders = asyncHandler(async(req, res) => {
 //@route GET /api/files/dashboard/folder/:folder_name
 //@access private
 
-const getFiles = asyncHandler(async(req, res) => {
-    const {folder_name} = req.params;
+const getFiles = asyncHandler(async (req, res) => {
+    const { folder_name } = req.params;
 
     const directory = await Directory.findOne({ "dir._foldername": folder_name }, { "dir.$": 1 });
     if (!directory) {
@@ -40,37 +40,39 @@ const getFiles = asyncHandler(async(req, res) => {
 //@route GET /api/files/dashboard/folder/:folder_name/:event_id
 //@access private
 
-const getFile = asyncHandler(async(req, res) => {
-    const {folder_name, event_id} = req.params;
-    
+const getFile = asyncHandler(async (req, res) => {
+    const { folder_name, event_id } = req.params;
+
     const directory = await Directory.findOne(
-        { "dir._foldername": folder_name,
-          "dir.files.EventID": event_id }, 
+        {
+            "dir._foldername": folder_name,
+            "dir.files.EventID": event_id
+        },
         { "dir.$": 1, });
-        
+
     if (!directory) {
         res.status(404);
         throw new Error("File not found");
     }
 
-    const matchedFile = directory.dir[0].files.find(file => {return parseInt(file.EventID) === parseInt(event_id)});
+    const matchedFile = directory.dir[0].files.find(file => { return parseInt(file.EventID) === parseInt(event_id) });
     res.status(200).json(matchedFile);
-    
+
 });
 
 //@desc create a folder in the directory
 //@route POST /api/files/dashboard
 //@access private
 
-const createFolder = asyncHandler(async(req, res) => {
+const createFolder = asyncHandler(async (req, res) => {
 
-    if(req.user.userType !== "admin") {
+    if (req.user.userType !== "admin") {
         res.status(403);
         throw new Error("User don't have permission to create folder");
     }
 
     console.log("The request body is :", req.body);
-    const {_foldername, path, files} = req.body;
+    const { _foldername, path, files } = req.body;
 
     if (_foldername === undefined) {
         res.status(400);
@@ -95,7 +97,7 @@ const createFolder = asyncHandler(async(req, res) => {
         { _id: directory._id },
         { $push: { dir: newFolder } }
     );
-    
+
     res.status(201).json(newFolder);
 
 });
@@ -104,19 +106,17 @@ const createFolder = asyncHandler(async(req, res) => {
 //@route POST /api/files/dashboard/folder/:folder_name
 //@access private
 
-const addFile = asyncHandler(async(req, res) => {
+const addFile = asyncHandler(async (req, res) => {
 
-    if(req.user.userType !== "admin") {
+    if (req.user.userType !== "admin") {
         res.status(403);
         throw new Error("User don't have permission to create folder");
     }
+    const { folder_name } = req.params;
 
-    const {folder_name} = req.params;
-
-    const {filename, suffix, Message, readOnly, deletable} = req.body;
-    if (filename === undefined || suffix === undefined || Message === undefined || readOnly === undefined || deletable  === undefined) {
-        res.status(400);
-        throw new Error("Please fill out the required fields");
+    const { filename, suffix, Message, readOnly, deletable } = req.body;
+    if (filename === undefined || suffix === undefined || Message === undefined || readOnly === undefined || deletable === undefined) {
+        res.status(400).json({ message: "Please fill out the required fields" });
     }
 
     const directory = await Directory.findOne({ "dir._foldername": folder_name }, { "dir.$": 1 });
@@ -133,7 +133,7 @@ const addFile = asyncHandler(async(req, res) => {
 
     const newFile = {
         EventID: directory.dir[0].files.length + 1,
-        filename,
+        filename: directory.dir[0].files.length + 1,
         suffix,
         Message,
         readOnly,
@@ -142,7 +142,7 @@ const addFile = asyncHandler(async(req, res) => {
     };
 
     await Directory.updateOne(
-        { "dir._foldername": folder_name }, 
+        { "dir._foldername": folder_name },
         { $push: { "dir.$.files": newFile } }
     );
 
@@ -153,26 +153,28 @@ const addFile = asyncHandler(async(req, res) => {
 //@route POST /api/files/dashboard/folder/:folder_name/:event_id
 //@access private
 
-const update_changedFile = asyncHandler(async(req, res) => {
-    const {folder_name, event_id} = req.params;
+const update_changedFile = asyncHandler(async (req, res) => {
+    const { folder_name, event_id } = req.params;
 
-    if(req.user.userType !== "admin") {
+    if (req.user.userType !== "admin") {
         res.status(403);
         throw new Error("User don't have permission to create folder");
     }
 
-    const {filename, suffix, Message, readOnly, deletable, path} = req.body;
-    if (filename === undefined || suffix === undefined || Message === undefined || readOnly === undefined || deletable  === undefined || path === undefined) {
+    const { filename, suffix, Message, readOnly, deletable, path } = req.body;
+    if (filename === undefined || suffix === undefined || Message === undefined || readOnly === undefined || deletable === undefined || path === undefined) {
         res.status(400);
         throw new Error("Please fill out the required fields");
     }
-    
+
     const directory = await Directory.findOne(
-        { "dir._foldername": folder_name,
-          "dir.files.EventID": event_id }, 
-        { "dir.$" : 1 }
+        {
+            "dir._foldername": folder_name,
+            "dir.files.EventID": event_id
+        },
+        { "dir.$": 1 }
     );
-    
+
     if (!directory) {
         res.status(404);
         throw new Error("File not found sa directory");
@@ -189,7 +191,7 @@ const update_changedFile = asyncHandler(async(req, res) => {
     };
 
     const changes = await Changes.findOne(
-        { "changedFiles.EventID": event_id}, 
+        { "changedFiles.EventID": event_id },
         { "dir.$": 1 });
 
     // IF the event_id does not exist in the changedSchema, then we will add it 
@@ -207,10 +209,10 @@ const update_changedFile = asyncHandler(async(req, res) => {
 
         await Changes.updateOne(
             { "changedFiles.EventID": event_id },
-            { $set: { changedFiles : editedFile } }
+            { $set: { changedFiles: editedFile } }
         );
     }
-    
+
     res.status(200).json(editedFile);
 
 });
@@ -219,18 +221,26 @@ const update_changedFile = asyncHandler(async(req, res) => {
 //@route POST /api/files/dashboard/folder/staged/:event_id
 //@access private
 
-const stageFile = asyncHandler(async(req, res) => {
+const stageFile = asyncHandler(async (req, res) => {
 
-    const {event_id} = req.params;
+    const { event_id } = req.params;
 
-    if(req.user.userType !== "admin") {
+    if (req.user.userType !== "admin") {
         res.status(403);
         throw new Error("User don't have permission to create folder");
     }
 
+<<<<<<< HEAD
     const {filename, suffix, Message, readOnly, deletable, path, status} = req.body;
     if (filename === undefined || suffix === undefined || Message === undefined || readOnly === undefined || 
         deletable  === undefined || path === undefined || status === undefined) {
+=======
+    console.log("OKKK");
+
+    const { filename, suffix, Message, readOnly, deletable, path, status } = req.body;
+    if (filename === undefined || suffix === undefined || Message === undefined || readOnly === undefined ||
+        deletable === undefined || path === undefined || status === undefined) {
+>>>>>>> 15f0bcef755cd60deb589220e96e59cba7dec913
         res.status(400);
         throw new Error("Please fill out the required fields");
     }
@@ -247,7 +257,7 @@ const stageFile = asyncHandler(async(req, res) => {
     };
 
     const changes = await Changes.findOne(
-        { "changedFiles.EventID": event_id}, 
+        { "changedFiles.EventID": event_id },
         { "dir.$": 1 });
 
     if (!changes) {
@@ -256,13 +266,45 @@ const stageFile = asyncHandler(async(req, res) => {
     }
 
     const allStaged = await Staged.findOne();
-        
+
     await Staged.updateOne(
-        { _id: allStaged._id},
-        { $push: { stagedFiles : editedFile } }
+        { _id: allStaged._id },
+        { $push: { stagedFiles: editedFile } }
     );
 
     res.status(200).json(editedFile);
+
+});
+
+const update_stagedStatus = asyncHandler(async (req, res) => {
+    const { event_id } = req.params;
+
+    if (req.user.userType !== "admin") {
+        res.status(403);
+        throw new Error("User don't have permission to create folder");
+    }
+
+    const { status } = req.body;
+    if (status === undefined) {
+        res.status(400);
+        throw new Error("Please fill out the required fields");
+    }
+
+    const staged = await Staged.findOne(
+        { "stagedFiles.EventID": event_id },
+        { "dir.$": 1 });
+
+    if (!staged) {
+        res.status(404);
+        throw new Error("File not found in stagedSchema");
+    }
+
+    await Staged.updateOne(
+        { "stagedFiles.EventID": event_id },
+        { $set: { "stagedFiles.$.status": status } }
+    );
+
+    res.status(200).json({ message: "File status updated" });
 
 });
 
@@ -273,6 +315,11 @@ module.exports = {
     createFolder,
     addFile,
     update_changedFile,
+<<<<<<< HEAD
     stageFile,
     viewStagedFiles
+=======
+    update_stagedStatus,
+    stageFile
+>>>>>>> 15f0bcef755cd60deb589220e96e59cba7dec913
 };
