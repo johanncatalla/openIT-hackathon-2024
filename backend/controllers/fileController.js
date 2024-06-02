@@ -271,6 +271,38 @@ const stageFile = asyncHandler(async (req, res) => {
 
 });
 
+const update_stagedStatus = asyncHandler(async (req, res) => {
+    const { event_id } = req.params;
+
+    if (req.user.userType !== "admin") {
+        res.status(403);
+        throw new Error("User don't have permission to create folder");
+    }
+
+    const { status } = req.body;
+    if (status === undefined) {
+        res.status(400);
+        throw new Error("Please fill out the required fields");
+    }
+
+    const staged = await Staged.findOne(
+        { "stagedFiles.EventID": event_id },
+        { "dir.$": 1 });
+
+    if (!staged) {
+        res.status(404);
+        throw new Error("File not found in stagedSchema");
+    }
+
+    await Staged.updateOne(
+        { "stagedFiles.EventID": event_id },
+        { $set: { "stagedFiles.$.status": status } }
+    );
+
+    res.status(200).json({ message: "File status updated" });
+
+});
+
 module.exports = {
     getFolders,
     getFiles,
@@ -278,5 +310,6 @@ module.exports = {
     createFolder,
     addFile,
     update_changedFile,
+    update_stagedStatus,
     stageFile
 };
