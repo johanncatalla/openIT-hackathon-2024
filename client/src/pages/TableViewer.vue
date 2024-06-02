@@ -119,23 +119,34 @@ export default {
             console.log(foldername);
         },
         onUpload(event) {
-                const file = event.target.files[0];
-                const formData = {
-                    file: file.name.split('.')[0],
-                    suffix: file.name.split('.')[1],
-                }
+            const file = event.target.files[0];
+            const formData = {
+            file: file.name.split('.')[0],
+            suffix: file.name.split('.')[1],
+            }
 
-                axios.post(`http://localhost:3115/api/files/dashboard/folder/${this.selectedFolder}`, formData, {
-                    headers: {
-                        Authorization: `Bearer ${this.AccessToken}`,
-                    },
-                }).then((res) => {
-                    console.log(res);
-                    this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-                }).catch((err) => {
-                    console.log(err);
-                });
+            axios.post(`http://localhost:3115/api/files/dashboard/folder/${this.selectedFolder}`, formData, {
+            headers: {
+                Authorization: `Bearer ${this.AccessToken}`,
             },
+            }).then((res) => {
+            console.log(res);
+            this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+
+            // Get the uploaded file contents
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const fileContent = e.target.result;
+                this.selectedFileContent = {
+                Message: fileContent,
+                readOnly: false
+                };
+            };
+            reader.readAsText(file);
+            }).catch((err) => {
+            console.log(err);
+            });
+        },
         onAddFolder() {
 
             axios.post('http://localhost:3115/api/files/dashboard', {
