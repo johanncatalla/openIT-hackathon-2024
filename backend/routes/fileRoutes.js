@@ -9,7 +9,7 @@ const {
     update_changedFile,
     stageFile,
     viewStagedFiles,
-    update_stagedStatus
+    update_stagedStatus,
     
 } = require("../controllers/fileController");
 

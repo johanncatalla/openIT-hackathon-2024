@@ -238,12 +238,8 @@ const stageFile = asyncHandler(async (req, res) => {
         throw new Error("User don't have permission to create folder");
     }
 
-    const {filename, suffix, Message, readOnly, deletable, path, status} = req.body;
-    if (filename === undefined || suffix === undefined || Message === undefined || readOnly === undefined || 
-        deletable  === undefined || path === undefined || status === undefined) {
-    console.log("OKKK");
-
     const { filename, suffix, Message, readOnly, deletable, path, status } = req.body;
+
     if (filename === undefined || suffix === undefined || Message === undefined || readOnly === undefined ||
         deletable === undefined || path === undefined || status === undefined) {
         res.status(400);
@@ -278,8 +274,8 @@ const stageFile = asyncHandler(async (req, res) => {
     );
 
     res.status(200).json(editedFile);
+});
 
-}
 
 const update_stagedStatus = asyncHandler(async (req, res) => {
     const { event_id } = req.params;
@@ -325,6 +321,3 @@ module.exports = {
     update_stagedStatus,
     stageFile
 }
-
-
-});
