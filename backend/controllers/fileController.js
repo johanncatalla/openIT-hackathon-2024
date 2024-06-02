@@ -35,7 +35,15 @@ const getFiles = asyncHandler(async (req, res) => {
     const files = directory.dir[0].files;
     res.status(200).json(files);
 });
+//@desc view all staged files
+//@route GET /api/files/dashboard/folder/staged/viewall
+//@access private
 
+const viewStagedFiles = asyncHandler(async(req, res) => {
+    const staged = await Staged.find();
+    const allStagedFiles = staged.stagedFiles[0];
+    res.status(200).json(allStagedFiles);
+});
 //@desc one file in the folder
 //@route GET /api/files/dashboard/folder/:folder_name/:event_id
 //@access private
