@@ -228,8 +228,6 @@ const stageFile = asyncHandler(async(req, res) => {
         throw new Error("User don't have permission to create folder");
     }
 
-    console.log("OKKK");
-
     const {filename, suffix, Message, readOnly, deletable, path, status} = req.body;
     if (filename === undefined || suffix === undefined || Message === undefined || readOnly === undefined || 
         deletable  === undefined || path === undefined || status === undefined) {
@@ -248,7 +246,6 @@ const stageFile = asyncHandler(async(req, res) => {
         status
     };
 
-    console.log("oK")
     const changes = await Changes.findOne(
         { "changedFiles.EventID": event_id}, 
         { "dir.$": 1 });
@@ -276,5 +273,6 @@ module.exports = {
     createFolder,
     addFile,
     update_changedFile,
-    stageFile
+    stageFile,
+    viewStagedFiles
 };
