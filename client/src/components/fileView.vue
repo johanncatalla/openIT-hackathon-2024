@@ -19,7 +19,7 @@
         <input type="checkbox" :checked="slotProps.data.deletable" disabled>
     </template>  
     </Column>    
-    <Column field="date" header="Date"></Column>        
+    <Column field="createdAt" header="Date"></Column>        
     </DataTable>
 </template>
   

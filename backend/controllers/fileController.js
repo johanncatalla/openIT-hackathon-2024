@@ -35,7 +35,15 @@ const getFiles = asyncHandler(async (req, res) => {
     const files = directory.dir[0].files;
     res.status(200).json(files);
 });
+//@desc view all staged files
+//@route GET /api/files/dashboard/folder/staged/viewall
+//@access private
 
+const viewStagedFiles = asyncHandler(async(req, res) => {
+    const staged = await Staged.find();
+    const allStagedFiles = staged.stagedFiles[0];
+    res.status(200).json(allStagedFiles);
+});
 //@desc one file in the folder
 //@route GET /api/files/dashboard/folder/:folder_name/:event_id
 //@access private
@@ -230,6 +238,9 @@ const stageFile = asyncHandler(async (req, res) => {
         throw new Error("User don't have permission to create folder");
     }
 
+    const {filename, suffix, Message, readOnly, deletable, path, status} = req.body;
+    if (filename === undefined || suffix === undefined || Message === undefined || readOnly === undefined || 
+        deletable  === undefined || path === undefined || status === undefined) {
     console.log("OKKK");
 
     const { filename, suffix, Message, readOnly, deletable, path, status } = req.body;
@@ -250,7 +261,6 @@ const stageFile = asyncHandler(async (req, res) => {
         status
     };
 
-    console.log("oK")
     const changes = await Changes.findOne(
         { "changedFiles.EventID": event_id },
         { "dir.$": 1 });
@@ -269,7 +279,7 @@ const stageFile = asyncHandler(async (req, res) => {
 
     res.status(200).json(editedFile);
 
-});
+}
 
 const update_stagedStatus = asyncHandler(async (req, res) => {
     const { event_id } = req.params;
@@ -310,6 +320,11 @@ module.exports = {
     createFolder,
     addFile,
     update_changedFile,
+    stageFile,
+    viewStagedFiles,
     update_stagedStatus,
     stageFile
-};
+}
+
+
+});
